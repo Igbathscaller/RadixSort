@@ -13,6 +13,9 @@ public class Radix {
     //return the number of digits in n.
 
     public static int length(int n){
+        if (n == 0){
+            return 1;
+        }
         return (int)Math.floor(Math.log(n))+1;
     }
     /*
@@ -31,14 +34,32 @@ public class Radix {
         int maxlength = 1;
         int current;
         SortableLinkedList[] buckets = new SortableLinkedList[10];
-        for(int i = 0; i<maxlength;i++){
+        //throwing stuff into buckets
+        //also finding maxlength
+        while(data.size() > 0){
+            current = data.remove(0);
+            buckets[current%10].add(current);
+            if (length(current) > maxlength){
+                maxlength=length(current);
+            }
+        }
+        //extending the original data
+        for(int i = 0; i<10; i++){
+            data.extend(buckets[i]);
+        }
+
+        //looping for each digit
+        for(int i = 1; i<maxlength ;i++){
             while(data.size() > 0){
                 current = data.remove(0);
-                buckets[current%10].add(current);
-                if (current > maxlength){
-                    maxlength=length(current);
-                }
+                buckets[nth(current,i)].add(current);
+            }
+            for(int j = 0; j<10; j++){
+                data.extend(buckets[j]);
             }
         }
     }
+
+    //Write a method that sorts any integer values
+    
 }
