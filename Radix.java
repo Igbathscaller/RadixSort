@@ -7,7 +7,7 @@ public class Radix {
         for (int i = 0; i < col; i++){
             divisor *= 10;
         } 
-        return (Math.abs(n) / divisor) % 10;
+        return Math.abs((Math.abs(n) / divisor) % 10);
     }
 
     //return the number of digits in n.
@@ -79,8 +79,8 @@ public class Radix {
                 negatives.add(current);
             }
         }
-        radixSortSimple(negatives);
         radixSortSimple(positives);
+        radixSortSimple(negatives);
         while(negatives.size() > 0){
             data.add(negatives.remove(negatives.size()-1));
         }
