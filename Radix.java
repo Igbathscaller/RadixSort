@@ -16,6 +16,7 @@ public class Radix {
         if (n == 0){
             return 1;
         }
+        n = Math.abs(n);
         return (int)Math.floor(Math.log(n))+1;
     }
     /*
@@ -42,7 +43,7 @@ public class Radix {
         //also finding maxlength
         while(data.size() > 0){
             current = data.remove(0);
-            buckets[current%10].add(current);
+            buckets[nth(current,0)].add(current);
             if (length(current) > maxlength){
                 maxlength=length(current);
             }
@@ -65,5 +66,25 @@ public class Radix {
     }
 
     //Write a method that sorts any integer values
+    public static void radixSort(SortableLinkedList data){
+        SortableLinkedList positives = new SortableLinkedList();
+        SortableLinkedList negatives = new SortableLinkedList();
+        int current;
+        while (data.size() > 0){
+            current = data.remove(0);
+            if (current >= 0){
+                positives.add(current);
+            }
+            else{
+                negatives.add(current);
+            }
+        }
+        radixSortSimple(negatives);
+        radixSortSimple(positives);
+        while(negatives.size() > 0){
+            data.add(negatives.remove(negatives.size()-1));
+        }
+        data.extend(positives);
+    }
 
 }
