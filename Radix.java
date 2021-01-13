@@ -34,6 +34,10 @@ public class Radix {
         int maxlength = 1;
         int current;
         SortableLinkedList[] buckets = new SortableLinkedList[10];
+        //initialize each bucket;
+        for(int i = 0; i<10; i++){
+            buckets[i]=new SortableLinkedList();
+        }
         //throwing stuff into buckets
         //also finding maxlength
         while(data.size() > 0){
@@ -61,5 +65,5 @@ public class Radix {
     }
 
     //Write a method that sorts any integer values
-    
+
 }
