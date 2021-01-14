@@ -3,11 +3,11 @@ public class Radix {
     //get nth digit of an int, where 0 is the ones column, 1 is the tens column etc.
 
     public static int nth(int n, int col){
-        int divisor = 1;
+        n = Math.abs(n);
         for (int i = 0; i < col; i++){
-            divisor *= 10;
+            n /= 10;
         } 
-        return Math.abs((Math.abs(n) / divisor) % 10);
+        return n % 10;
     }
 
     //return the number of digits in n.
@@ -32,7 +32,7 @@ public class Radix {
 
     //Write a method that sorts non-negative integer values
     public static void radixSortSimple(SortableLinkedList data){
-        int maxlength = 1;
+        int max = 0;
         int current;
         SortableLinkedList[] buckets = new SortableLinkedList[10];
         //initialize each bucket;
@@ -44,10 +44,13 @@ public class Radix {
         while(data.size() > 0){
             current = data.remove(0);
             buckets[nth(current,0)].add(current);
-            if (length(current) > maxlength){
-                maxlength=length(current);
+            if (current > max){
+                max=current;
             }
         }
+
+        int maxlength = length(max);
+        
         //extending the original data
         for(int i = 0; i<10; i++){
             data.extend(buckets[i]);
@@ -60,6 +63,43 @@ public class Radix {
                 buckets[nth(current,i)].add(current);
             }
             for(int j = 0; j<10; j++){
+                data.extend(buckets[j]);
+            }
+        }
+    }
+
+    private static void radixSortNegative(SortableLinkedList data){
+        int min = 0;
+        int current;
+        SortableLinkedList[] buckets = new SortableLinkedList[10];
+        //initialize each bucket;
+        for(int i = 0; i<10; i++){
+            buckets[i]=new SortableLinkedList();
+        }
+        //throwing stuff into buckets
+        //also finding maxlength
+        while(data.size() > 0){
+            current = data.remove(0);
+            buckets[nth(current,0)].add(current);
+            if (current < min){
+                min=current;
+            }
+        }
+
+        int maxlength = length(min);
+        
+        //extending the original data
+        for(int i = 9; i>=0; i--){
+            data.extend(buckets[i]);
+        }
+
+        //looping for each digit
+        for(int i = 1; i<maxlength ;i++){
+            while(data.size() > 0){
+                current = data.remove(0);
+                buckets[nth(current,i)].add(current);
+            }
+            for(int j = 9; j>=0; j--){
                 data.extend(buckets[j]);
             }
         }
@@ -80,10 +120,9 @@ public class Radix {
             }
         }
         radixSortSimple(positives);
-        radixSortSimple(negatives);
-        while(negatives.size() > 0){
-            data.add(negatives.remove(negatives.size()-1));
-        }
+        radixSortNegative(negatives);
+        
+        data.extend(negatives);
         data.extend(positives);
     }
 
